@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
     balance: DataTypes.INTEGER
   }, {
     hooks:{
-      beforeSave: (customer, options) => {
+      beforeCreate: (customer, options) => {
         customer.password = bcrypt.hashSync(customer.password, salt)
 
       }
@@ -46,6 +46,7 @@ module.exports = (sequelize, DataTypes) => {
   });
   Customer.associate = function(models) {
     // associations can be defined here
+    Customer.hasMany(models.Favourite,{foreignKey: 'customerId'})
   };
   return Customer;
 };

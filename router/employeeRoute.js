@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const {Employee, Customer, Bookrent, Book} = require('../models')
+const bcryt= require('bcrypt')
 
 router.get('/', (req, res) => {
     Book.findAll()
@@ -84,4 +85,60 @@ router.get('/delete/:bookId', (req, res) => {
     })
 })
 
+router.get('/login', (req, res) => {
+    res.render('login.ejs', {
+        postRoute: '/employee/login',
+        registerRoute: '/employee/register'
+    })
+})
+
+router.post('/login', (req, res) => {
+    Employee.findOne({
+        where: {
+            email: req.body.email
+        }
+    })
+    .then( (oneEmployee) => {
+        if(!oneEmployee) {
+            throw new Error(`Email is wrong`)
+        } else {
+            let checkPassowrd= bcryt.compareSync(req.body.password, oneEmployee.password)
+            if(checkPassowrd){
+                req.session.employee = {
+                    id: oneEmployee.id,
+                    name: `${oneEmployee.firstName} ${oneEmployee.lastName}`,
+                    role: `Employee`
+                }
+                res.redirect('/employee', {
+                    session: req.session.employee
+                })
+            }else{
+                throw new Error ('Wrong password')
+            }
+        }
+    })
+    .catch( (err) => {
+        res.send(err)
+    })
+})
+
+router.get('/register', (req, res) => {
+    res.render('register.ejs', {
+        postRoute: '/customer/register'
+    })
+})
+
+router.post('/register', (req, res) => {
+    Employee.create({
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        birthday: req.body.birthday,
+        email: req.body.email,
+        password: req.body.password,
+        isLogin: 'false'
+    })
+    .then( (newEmployee) => {
+        res.redirect('/login')
+    })
+})
 module.exports = router

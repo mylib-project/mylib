@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title><%=book.title%>></title>
+  </head>
+  <body>
+    <div class="container">
+        <h2 class="display-4 text-center">MyLib Books Catalogue</h2><br>
+        <section>
+            <div class="row">
+                <div class="col-sm-5 offset-sm 1">
+                    <img src="`<%=book.cover%>`">
+                </div>
+                <div class="col-sm-6">
+                        <h3 class="text-center font-weight-bold">Detail books</h3><br>
+                    <form>
+                        <label><b>Title:</b> <%= book.title%></label><br>
+                        <label><b>Author:</b> <%= book.author%></label><br>
+                        <label><b>Title:</b> <%= book.title%></label><br>
+                        <label><b>Publisher:</b> <%= book.publisher%></label><br>
+                        <label><b>Publication Year:</b> <%= publicationYear%></label><br>
+                        <label><b>Number of Page:</b> <%= book.numberOfPage%></label><br>
+                        <label><b>Price:</b> <%= book.price%></label><br>
+                        <label><b>Status:</b> <%= cekStatus(book.stock)%></label><br>
+                    </form><br>
+
+                    <div class="row">
+                        <h5 class="text-center font-weight-bold">Options</h5>:<br>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <form method="POST" action="/customer/<%= book.id%>/rent">
+                                <%if(book.stock == 0){ %>
+                                    <button type="submit" class="btn btn-primary btn-sm" disabled>Rent This Book</button>
+                                <% }else{ %>
+                                    <button type="submit" class="btn btn-primary btn-sm">Rent This Book</button>
+                                <% } %>
+                            </form>
+                        </div>
+                        <div class="col-sm-6">
+                            <form method="POST" action="/customer/<%= book.id%>/favourite">
+                                <button type="submit" class="btn btn-primary btn-sm">Add to My Favourite</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  </body>
+</html>

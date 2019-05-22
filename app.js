@@ -10,5 +10,5 @@ app.listen(port, () => console.log(`Server running on port port: ${port}`))
 app.get('/', (req, res) => {
     res.render('home, login.')
 })
-app.use('/employees', employeeRoute)
-app.use('/customers', customerRoute)
+app.use('/employee', employeeRoute)
+app.use('/customer', customerRoute)

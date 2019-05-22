@@ -26,11 +26,11 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     password: {
-      type:DataTypes.STRING,
-      validate:{
-        len:{
-          args: [8,12],
-          msg: 'Less password length. Password length 8-12 character'
+      type: DataTypes.STRING,
+      validate: {
+        len: {
+          args: [8, 12],
+          msg: `Password length must between 8-12 characters`
         }
       }
     },
@@ -40,6 +40,7 @@ module.exports = (sequelize, DataTypes) => {
     hooks:{
       beforeSave: (customer, options) => {
         customer.password = bcrypt.hashSync(customer.password, salt)
+
       }
     }
   });

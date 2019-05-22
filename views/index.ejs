@@ -10,26 +10,28 @@
     <title>MyLib.id</title>
   </head>
   <body>
-    <div class="jumbotron"><br>
-        <h1 class="text-center">Welcome to MyLib.id</h1><br>
-        <blockquote class="blockquote text-center">
-            <p class="mb-0">“A book is a gift you can open again and again.”</p>
-            <footer class="blockquote-footer">— Garrison Keillor</footer>
-        </blockquote>
-        <div class="container">
-            <div class="row justify-content-around">
-                <div class="col">
+    <div class="container"><br>
+        <header>
+            <h1 class="text-center">Welcome to MyLib.id</h1><br>
+            <blockquote class="blockquote text-center">
+                <p class="mb-0">“A book is a gift you can open again and again.”</p>
+                <footer class="blockquote-footer"> Garrison Keillor</footer>
+            </blockquote>
+        </header>
+        <section>
+            <div class="row">
+                <div class="col-sm-6">
                     <form method="GET" action="/customer/login" style="float: right">
                         <button type="submit" class="btn btn-primary btn-lg">Customer</button>
                     </form>
                 </div>
-                <div class="col">
+                <div class="col-sm-6">
                     <form method="GET" action="/employee/login">
                         <button type="submit" class="btn btn-primary btn-lg">Employee</button>
                     </form>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

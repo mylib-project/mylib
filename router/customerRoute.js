@@ -1,7 +1,11 @@
 const router= require('express').Router()
 const {Customer, Book, bookTag, bookRent, Favourite, Tag, Employee} = require('../models')
 const bcryt= require('bcrypt')
+const Sequelize= require('sequelize')
+const Op= Sequelize.Op
 const cekStatus= require('../helpers/cekStatus')
+const getFormatDate= require('../helpers/getFormatDate')
+
 
 router.get('/login', (req, res)=>{
     res.render('login.ejs',{
@@ -68,18 +72,90 @@ router.post('/register', (req, res)=>{
     })
 })
 
-router.get('/catalog',(req,res)=>{
-    Promise.all([Book.findAll(), Tag.findAll()])
-    .then((data)=>{
-        res.render('./customer/catalog.ejs',{
-            books:data[0],
-            tags: data[1]
+router.get('/catalog', (req, res)=>{
+    let status= req.query.status
+    let bookTitle= req.query.title
+    let tag= req.query.tag
+    console.log(bookTitle, 'status')
+    let dataBuku=null
+    let dataTag= null
+
+    Promise.all([Book.findAll({include:[bookTag]}), Tag.findAll()])
+        .then((data)=>{
+            dataBuku= data[0]
+            dataTag= data[1]
         })
-    })
-    .catch(err=>{
-        res.send(err)
-    })
+        .catch(err=>{
+            res.send(err)
+        })
+
+
+    if(status == undefined){
+        if(bookTitle == undefined){
+
+        }else{
+            if(tag== undefined){
+
+            }else{
+                if(typeof tag != 'object'){
+
+                }else{
+
+                }
+            }
+        }
+    }else{
+        
+    }
+
 })
+// router.get('/catalog',(req,res)=>{
+//     if(req.query.tag == undefined){
+//         Promise.all([Book.findAll(), Tag.findAll()])
+//         .then((data)=>{
+//             res.render('./customer/catalog.ejs',{
+//                 books:data[0],
+//                 tags: data[1]
+//             })
+//         })
+//         .catch(err=>{
+//             res.send(err)
+//         })
+//     }else{
+//         let tag= req.query.tag
+//         if(typeof tag != 'object'){
+//             Promise.all([Book.findAll({include: {
+//                 model:bookTag,
+//                 where:{tagId: tag}
+//                  }
+//             }), Tag.findAll()])
+//             .then((data)=>{
+//                 res.render('./customer/catalog.ejs',{
+//                     books:data[0],
+//                     tags: data[1]
+//                 })
+//             })
+//             .catch(err=>{
+//                 res.send(err)
+//             })
+//         }else{
+//             Promise.all([Book.findAll({include: {
+//                 model:bookTag,
+//                 where:{tagId:{[Op.or]: tag}}
+//                  }
+//             }), Tag.findAll()])
+//             .then((data)=>{
+//                 res.render('./customer/catalog.ejs',{
+//                     books:data[0],
+//                     tags: data[1]
+//                 })
+//             })
+//             .catch(err=>{
+//                 res.send(err)
+//             })
+//         }
+//     }
+// })
 
 router.get('/book/:bookId',(req, res)=>{
     Book.findByPk(req.params.bookId)
@@ -207,6 +283,36 @@ router.get('/myfavourite', (req, res)=>{
             })
         })
         .catch(err =>{
+            res.send(err)
+        })
+    }
+})
+
+router.get('/myhistory',(req, res)=>{
+    if(req.session.user== undefined){
+        res.redirect('/customer/login')
+    }else{
+        let userId= req.session.user.id
+        Customer.findByPk(userId,{
+            include:{
+                model: bookRent,
+                include:{
+                    model: Book
+                }
+            }
+        })
+        .then(data=>{
+            let a= data.bookRents
+            for(let i=0; i<a.length; i++){
+                console.log(a[i].Book.id,'=====')
+            }
+            
+            res.render('./customer/history.ejs',{
+                data:data.bookRents,
+                getFormatDate: getFormatDate
+            })
+        })
+        .catch(err=>{
             res.send(err)
         })
     }

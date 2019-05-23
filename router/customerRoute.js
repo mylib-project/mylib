@@ -5,6 +5,9 @@ const Sequelize= require('sequelize')
 const Op= Sequelize.Op
 const cekStatus= require('../helpers/cekStatus')
 const getFormatDate= require('../helpers/getFormatDate')
+const checkLogin = require('../middleware/checkLogin')
+const countDay= require('../helpers/countDay')
+const getFormatRupiah= require('../helpers/getFormatRupiah')
 
 
 router.get('/login', (req, res)=>{
@@ -109,29 +112,16 @@ router.post('/register', (req, res)=>{
 //     }
 // })
 
-router.get('/catalog',(req,res)=>{
+router.get('/catalog', checkLogin ,(req,res)=>{
+    let status= req.query.status
+    let bookTitle= req.query.title
+    let tag= req.query.tag
     let userId= req.session.user.id
-    if(req.query.tag == undefined){
-        Promise.all([Book.findAll(), Tag.findAll(), Customer.findByPk(userId)])
-        .then((data)=>{
-            res.render('./customer/catalog.ejs',{
-                books:data[0],
-                tags: data[1],
-                customer: data[2]
-            })
-        })
-        .catch(err=>{
-            res.send(err)
-        })
-    }else{
-        let tag= req.query.tag
-        if(typeof tag != 'object'){
-            Promise.all([Book.findAll({include: {
-                model:bookTag,
-                where:{tagId: tag}
-                 }
-            }), Tag.findAll(), Customer.findByPk(userId)])
+    if(tag == undefined){
+        if(bookTitle== undefined){
+            Promise.all([Book.findAll(), Tag.findAll(), Customer.findByPk(userId)])
             .then((data)=>{
+                console.log(data[0])
                 res.render('./customer/catalog.ejs',{
                     books:data[0],
                     tags: data[1],
@@ -142,11 +132,7 @@ router.get('/catalog',(req,res)=>{
                 res.send(err)
             })
         }else{
-            Promise.all([Book.findAll({include: {
-                model:bookTag,
-                where:{tagId:{[Op.or]: tag}}
-                 }
-            }), Tag.findAll(), Customer.findByPk(userId)])
+            Promise.all([Book.findAll({where: { title: { [Op.like]: `%${bookTitle}%` }}}), Tag.findAll(), Customer.findByPk(userId)])
             .then((data)=>{
                 res.render('./customer/catalog.ejs',{
                     books:data[0],
@@ -158,10 +144,83 @@ router.get('/catalog',(req,res)=>{
                 res.send(err)
             })
         }
+        
+    }else{
+        if(typeof tag != 'object'){
+            if(bookTitle== undefined){
+                Promise.all([Book.findAll({include: {
+                    model:bookTag,
+                    where:{tagId: tag}
+                     }
+                }), Tag.findAll(), Customer.findByPk(userId)])
+                .then((data)=>{
+                    res.render('./customer/catalog.ejs',{
+                        books:data[0],
+                        tags: data[1],
+                        customer: data[2]
+                    })
+                })
+                .catch(err=>{
+                    res.send(err)
+                })
+            }else{
+                Promise.all([Book.findAll({include: {
+                    model:bookTag,
+                    where:{tagId: tag}
+                     }, where: { title: { [Op.like]: `%${bookTitle}%` }}
+                }), Tag.findAll(), Customer.findByPk(userId)])
+                .then((data)=>{
+                    res.render('./customer/catalog.ejs',{
+                        books:data[0],
+                        tags: data[1],
+                        customer: data[2]
+                    })
+                })
+                .catch(err=>{
+                    res.send(err)
+                })
+            }
+            
+        }else{
+            if(bookTitle == undefined){
+                Promise.all([Book.findAll({include: {
+                    model:bookTag,
+                    where:{tagId:{[Op.or]: tag}}
+                     }
+                }), Tag.findAll(), Customer.findByPk(userId)])
+                .then((data)=>{
+                    res.render('./customer/catalog.ejs',{
+                        books:data[0],
+                        tags: data[1],
+                        customer: data[2]
+                    })
+                })
+                .catch(err=>{
+                    res.send(err)
+                })
+            }else{
+                Promise.all([Book.findAll({include: {
+                    model:bookTag,
+                    where:{tagId:{[Op.or]: tag}}
+                     },  where: { title: { [Op.like]: `%${bookTitle}%` }}
+                }), Tag.findAll(), Customer.findByPk(userId)])
+                .then((data)=>{
+                    res.render('./customer/catalog.ejs',{
+                        books:data[0],
+                        tags: data[1],
+                        customer: data[2]
+                    })
+                })
+                .catch(err=>{
+                    res.send(err)
+                })
+            }
+            
+        }
     }
 })
 
-router.get('/book/:bookId',(req, res)=>{
+router.get('/book/:bookId', checkLogin ,(req, res)=>{
     Book.findByPk(req.params.bookId)
     .then(book=>{
         res.render('./customer/book.ejs',{
@@ -175,10 +234,7 @@ router.get('/book/:bookId',(req, res)=>{
     })
 })
 
-router.post('/:bookId/favourite', (req, res)=>{
-    if(req.session.user== undefined){
-        res.redirect('/customer/login')
-    }else{
+router.post('/:bookId/favourite', checkLogin ,(req, res)=>{
         let userId= req.session.user.id
         Customer.findByPk(userId)
         .then(customer=>{
@@ -193,14 +249,10 @@ router.post('/:bookId/favourite', (req, res)=>{
         .catch(err=>{
             res.send(err)
         })
-    }
 
 })
 
-router.post('/:bookId/rent',(req, res)=>{
-   if(req.session.user == undefined){
-        res.redirect('/customer/login')
-   }else{
+router.post('/:bookId/rent', checkLogin ,(req, res)=>{
     let userId= req.session.user.id
     console.log(userId)
     let bookId= req.params.bookId
@@ -257,14 +309,10 @@ router.post('/:bookId/rent',(req, res)=>{
         .catch(err=>{
             res.send(err)
         })    
-   }
 })
 
 
-router.get('/myfavourite', (req, res)=>{
-    if(req.session.user== undefined){
-        res.redirect('/customer/login')
-    }else{
+router.get('/myfavourite', checkLogin ,(req, res)=>{
         let userId= req.session.user.id
         let books=[]
         let favouriteId=[]
@@ -283,19 +331,16 @@ router.get('/myfavourite', (req, res)=>{
             }
             res.render('./customer/favourite.ejs',{
                 books:books,
-                favouriteId:favouriteId
+                favouriteId:favouriteId,
+                getFormatRupiah: getFormatRupiah
             })
         })
         .catch(err =>{
             res.send(err)
         })
-    }
 })
 
-router.get('/myhistory',(req, res)=>{
-    if(req.session.user== undefined){
-        res.redirect('/customer/login')
-    }else{
+router.get('/myhistory', checkLogin ,(req, res)=>{
         let userId= req.session.user.id
         Customer.findByPk(userId,{
             include:{
@@ -306,21 +351,73 @@ router.get('/myhistory',(req, res)=>{
             }
         })
         .then(data=>{
-            let a= data.bookRents
-            for(let i=0; i<a.length; i++){
-                console.log(a[i].Book.id,'=====')
-            }
             
             res.render('./customer/history.ejs',{
+                // data : data
                 data:data.bookRents,
-                getFormatDate: getFormatDate
+                getFormatDate: getFormatDate,
+                countDay:countDay,
+                getFormatRupiah:getFormatRupiah
             })
         })
         .catch(err=>{
             res.send(err)
         })
-    }
 })
+
+router.get('/:rentId/return-book', checkLogin, (req, res)=>{
+    bookRent.findByPk(req.params.rentId)
+    .then(rent=>{
+        rent.status= 'Returned'
+        return Promise.all([rent.save(), Book.findByPk(rent.bookId)])
+    })
+    .then(([rents, book])=>{
+        book.stock= book.stock+1
+        return book.save()
+    })
+    .then(()=>{
+        res.redirect('/customer/myhistory')
+    })
+    .catch(err=>{
+        res.send(err)
+    })
+})
+
+
+router.get('/top-up', checkLogin, (req, res)=>{
+    Customer.findByPk(req.session.user.id)
+    .then(customer=>{
+        res.render('./customer/account.ejs',{
+            customer: customer.dataValues,
+            getFormatDate: getFormatDate,
+            getFormatRupiah: getFormatRupiah
+        })
+    })
+    .catch(err=>{
+        res.send(err)
+    })
+})
+
+router.post('/top-up', checkLogin, (req, res)=>{
+    Customer.findByPk(req.session.user.id)
+    .then(customer=>{
+        customer.balance= customer.balance+Number(req.body.nominal)
+        return customer.save()
+    })
+    .then(()=>{
+        res.redirect('/customer/top-up')
+    })
+    .catch(err=>{
+        res.send(err)
+    })
+})
+
+
+router.get('/logout', checkLogin ,(req,res)=>{
+    req.session.destroy()
+    res.redirect('/')
+})
+
 
 
 

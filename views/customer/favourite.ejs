@@ -9,10 +9,26 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <title>My Favourite Books</title>
+    <style>
+        body {
+            background-image: url("/image/background.jpg");
+            background-size: 100%;
+            background-repeat:repeat-y;
+        }
+        table{
+          background-color: antiquewhite;
+          padding: 5% 5%;
+        }
+        h2{
+            color: #6666ff
+        }
+        
+  </style>
   </head>
   <body>
+      <%- include('../partials/navbar-cust.ejs') %>
    <div class="container">
-        <br><h3 class="text-center font-weight-bold">List My Favourite Book</h3><br>
+        <br><h2 class="text-center font-weight-bold">My Favourite Book</h2><br>
         <section>
             <table class="table table-hover">
                 <thead class="bg-danger">

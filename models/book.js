@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
   Book.associate = function(models) {
     // associations can be defined here
     Book.hasMany(models.Favourite, {foreignKey:'bookId'})
+
     Book.hasMany(models.bookRent,{foreignKey: "bookId"})
     Book.hasMany(models.bookTag,{foreignKey: "bookId"})
   };

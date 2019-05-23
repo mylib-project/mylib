@@ -3,6 +3,7 @@ const app= express()
 const port= 3000
 const customerRoute = require('./router/customerRoute')
 const employeeRoute = require('./router/employeeRoute')
+const session = require('express-session')
 
 app.use(express.urlencoded({ extended: false }));
 app.use(session({

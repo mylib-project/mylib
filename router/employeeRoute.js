@@ -1,6 +1,6 @@
 const router = require('express').Router()
 const {Employee, Customer, Bookrent, Book} = require('../models')
-const bcryt= require('bcrypt')
+const bcrypt= require('bcrypt')
 
 router.get('/', (req, res) => {
     Book.findAll()
@@ -102,14 +102,15 @@ router.post('/login', (req, res) => {
         if(!oneEmployee) {
             throw new Error(`Email is wrong`)
         } else {
-            let checkPassowrd= bcryt.compareSync(req.body.password, oneEmployee.password)
+            let checkPassowrd= bcrypt.compareSync(req.body.password, oneEmployee.password)
             if(checkPassowrd){
                 req.session.employee = {
                     id: oneEmployee.id,
                     name: `${oneEmployee.firstName} ${oneEmployee.lastName}`,
                     role: `Employee`
                 }
-                res.redirect('/employee', {
+                // res.send(req.session.employee)
+                res.render('employee.ejs', {
                     session: req.session.employee
                 })
             }else{
@@ -124,7 +125,7 @@ router.post('/login', (req, res) => {
 
 router.get('/register', (req, res) => {
     res.render('register.ejs', {
-        postRoute: '/customer/register'
+        postRoute: '/employee/login'
     })
 })
 
@@ -138,7 +139,7 @@ router.post('/register', (req, res) => {
         isLogin: 'false'
     })
     .then( (newEmployee) => {
-        res.redirect('/login')
+        res.redirect('/employee/login')
     })
 })
 module.exports = router

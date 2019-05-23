@@ -16,13 +16,13 @@ router.post('/login', (req, res)=>{
         else{
             let checkPassowrd= bcryt.compareSync(req.body.password, customer.password)
             if(checkPassowrd){
-                req.session.employee = {
-                    id: oneEmployee.id,
-                    name: `${oneEmployee.firstName} ${oneEmployee.lastName}`,
-                    role: `Employee`
+                req.session.customer = {
+                    id: customer.id,
+                    name: `${customer.firstName} ${customer.lastName}`,
+                    role: `Customer`
                 }
                 res.redirect('/customer/book', {
-                    session: req.session.employee
+                    session: req.session.customer
                 })
             }else{
                 throw new Error ('Wrong password')

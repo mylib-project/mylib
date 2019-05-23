@@ -8,8 +8,24 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>Books Catalog</title>
+    <style>
+            body {
+                background-image: url("/image/background.jpg");
+                background-size: 100%;
+                background-repeat:repeat-y;
+            }
+            table{
+              background-color: antiquewhite;
+              padding: 5% 5%;
+            }
+            h2{
+                color: #6666ff
+            }
+            
+      </style>
   </head>
   <body>
+        <%- include('../partials/navbar-cust.ejs') %>
     <div class="container">
         <!-- Header -->
         <header>
@@ -20,7 +36,7 @@
         </header><br>
         
         <!-- Body -->
-        <div class="container">
+        <div class="container2">
             <div class="row">
                 <!-- Kolom category -->
                 <div class="col-md-3">

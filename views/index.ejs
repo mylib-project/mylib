@@ -8,17 +8,35 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>MyLib</title>
+    <style>
+            body {
+                background-image: url("/image/home.jpg");
+                background-size: 100%;
+                background-repeat: no-repeat;
+            }
+            p{
+                background-color: grey
+            }
+            footer{
+                background-color: grey
+            }
+            h1{
+                font-weight: bold;
+                color: #6666ff
+            }
+    </style>
   </head>
   <body>
     <div class="container"><br>
         <header>
-            <h1 class="text-center">Welcome to MyLib Book Rent</h1><br>
+            <h1 class="text-center text-primary">Welcome to MyLib Book Rent</h1><br>
             <blockquote class="blockquote text-center">
-                <p class="mb-0">“A book is a gift you can open again and again.”</p>
-                <footer class="blockquote-footer"> Garrison Keillor</footer>
+                <p class="mb-0 text-white" >“A book is a gift you can open again and again.”</p>
+                <footer class="blockquote-footer text-white"> Garrison Keillor</footer>
             </blockquote>
-        </header>
-        <section>
+        </header><br>
+        <section><br>
+            <h4 class="font-weight-bold text-center text-primary">Login as:</h4><br>
             <div class="row">
                 <div class="col-sm-6">
                     <form method="GET" action="/customer/login" style="float: right">

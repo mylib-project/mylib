@@ -49,5 +49,9 @@ module.exports = (sequelize, DataTypes) => {
     Customer.hasMany(models.Favourite,{foreignKey: 'customerId'})
     Customer.hasMany(models.bookRent,{foreignKey: "customerId"})
   };
+
+  Customer.prototype.getFullName= function(){
+    return `${this.firstName} ${this.lastName}`
+  }
   return Customer;
 };

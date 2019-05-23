@@ -13,8 +13,11 @@
     <div class="container">
         <!-- Header -->
         <header>
-            <h2 class="display-4 text-center">MyLib Books Catalogue</h2><br>
-        </header>
+            <br><h2 class="display-4 text-center">MyLib Books Catalogue</h2>
+            <blockquote class="blockquote text-center">
+                <p class="mb-0 text-primary">Welcome <%= customer.getFullName() %></p>
+            </blockquote>
+        </header><br>
         
         <!-- Body -->
         <div class="container">
@@ -44,8 +47,8 @@
                 </div>
                 <!-- Kolom Tabel list buku -->
                 <div class="col-md-9">
-                    <table class="table table-hover table-dark">
-                        <thead  class="h5 text-center text-primary">
+                    <table class="table table-hover">
+                        <thead  class="h5 text-center bg-danger">
                             <tr>
                             <th scope="col">No</th>
                             <th scope="col">Cover</th>
@@ -65,7 +68,7 @@
                                     <td><%= books[i].author%></td>
                                     <td><%= books[i].publisher%></td>
                                     <td><a href="/customer/book/<%= books[i].id%>">
-                                        <button type="button" class="btn btn-danger">Detail</button></a>
+                                        <button type="button" class="btn btn-primary">Detail</button></a>
                                     </td>
                                 </tr>
                             <% }%>

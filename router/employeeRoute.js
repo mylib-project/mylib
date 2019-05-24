@@ -1,6 +1,8 @@
 const router = require('express').Router()
 const {Employee, Customer, Tag, bookrent, Book, bookTag} = require('../models')
 const checkLogin = require('../middleware/checkLogin')
+const multer = require('multer');
+const upload = multer({ dest: './uploads/' });
 let bcrypt = require('bcrypt')
 
 router.get('/', checkLogin, (req, res) => {
@@ -205,6 +207,18 @@ router.post('/register', (req, res) => {
     .catch( (err) => {
         res.send(err)
     })
+})
+
+router.post('/upload', upload.single('myFile'), (req, res) => {
+    if (req.file) {
+        console.log('Uploading file...');
+        var filename = req.file.filename;
+        var uploadStatus = 'File Uploaded Successfully';
+    } else {
+        console.log('No File Uploaded');
+        var filename = 'FILE NOT UPLOADED';
+        var uploadStatus = 'File Upload Failed';
+    }
 })
 
 module.exports = router

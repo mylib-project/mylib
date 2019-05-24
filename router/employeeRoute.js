@@ -4,6 +4,7 @@ const checkLogin = require('../middleware/checkLogin')
 const multer = require('multer');
 const upload = multer({ dest: './uploads/' });
 let bcrypt = require('bcrypt')
+let filename
 
 router.get('/', checkLogin, (req, res) => {
     Book.findAll({
@@ -97,7 +98,8 @@ router.post('/addBook', checkLogin, (req, res) => {
         publicationYear:  req.body.publicationYear,
         numberOfPage:  req.body.numberOfPage,
         price:  req.body.price,
-        stock:  req.body.stock
+        stock:  req.body.stock,
+        cover: `./uploads/${filename}`
     })
     .then( (newBook) => {
         if (typeof req.body.tag !== 'object') {
@@ -212,11 +214,11 @@ router.post('/register', (req, res) => {
 router.post('/upload', upload.single('myFile'), (req, res) => {
     if (req.file) {
         console.log('Uploading file...');
-        var filename = req.file.filename;
+        filename = req.file.filename;
         var uploadStatus = 'File Uploaded Successfully';
     } else {
         console.log('No File Uploaded');
-        var filename = 'FILE NOT UPLOADED';
+        filename = 'FILE NOT UPLOADED';
         var uploadStatus = 'File Upload Failed';
     }
 })

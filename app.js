@@ -17,7 +17,9 @@ const storage = multer.diskStorage({
 });
 var upload = multer({storage:storage}).single('myFile')
 
-app.use(express.urlencoded({ extended: false }))
+
+app.use(express.urlencoded({ extended: false }));
+app.use(express.static(__dirname+'/public'))
 app.use(session({
     secret: 'mylib.id',
     resave: false,

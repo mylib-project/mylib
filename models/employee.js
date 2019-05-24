@@ -41,6 +41,7 @@ module.exports = (sequelize, DataTypes) => {
   });
   Employee.associate = function(models) {
     // associations can be defined here
+    Employee.hasMany(models.bookRent,{foreignKey: "employeeId"})
   };
   return Employee;
 };

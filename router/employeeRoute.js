@@ -1,8 +1,8 @@
 const router = require('express').Router()
-const {Employee, Customer, Tag, bookrent, Book, bookTag} = require('../models')
+const {Employee, Tag, Book, bookTag} = require('../models')
 const checkLogin = require('../middleware/checkLogin')
 const multer = require('multer');
-const upload = multer({ dest: './uploads/' });
+const upload = multer({ dest: './views/customer/' });
 let bcrypt = require('bcrypt')
 let filename
 
@@ -58,22 +58,44 @@ router.post('/edit/:bookId', checkLogin, (req, res) => {
             allBookTag.forEach( (bookTag) => {
                 bookTag.destroy()
             })
-            if (typeof req.body.tag !== 'object') {
-                booktag = new bookTag()
-                booktag.tagId = Number(req.body.tag)
-                booktag.bookId = Number(oneBookToUpdate.id)
-                booktag.save()
-            } else if (typeof req.body.tag == 'object') {
-                req.body.tag.forEach( (singleTag) => {
+            oneBookToUpdate.update({
+                title: req.body.title,
+                author: req.body.author,
+                publisher:  req.body.publisher,
+                publicationYear:  req.body.publicationYear,
+                numberOfPage:  req.body.numberOfPage,
+                price:  req.body.price,
+                stock:  req.body.stock,
+                cover: `./uploads/${filename}`
+            })
+            .then( () => {
+                if (typeof req.body.tag == 'object') {
+                    req.body.tag.forEach( (singleTag) => {
+                        booktag = new bookTag()
+                        booktag.tagId = Number(singleTag)
+                        booktag.bookId = Number(oneBookToUpdate.id)
+                        booktag.save()
+                    })
+                } else {
                     booktag = new bookTag()
-                    booktag.tagId = Number(singleTag)
+                    booktag.tagId = Number(req.body.tag)
                     booktag.bookId = Number(oneBookToUpdate.id)
                     booktag.save()
-                })
-            }
-            res.redirect('/employee')
+                }
+                
+                res.redirect('/employee')
+            })
+            .catch( (err) => {
+                res.send(err)
+            })
             
         })
+        .catch( (err) => {
+            res.send(err)
+        })
+    })
+    .catch( (err) => {
+        res.send(err)
     })
 })
 
@@ -99,21 +121,21 @@ router.post('/addBook', checkLogin, (req, res) => {
         numberOfPage:  req.body.numberOfPage,
         price:  req.body.price,
         stock:  req.body.stock,
-        cover: `./uploads/${filename}`
+        cover: `./${filename}`
     })
     .then( (newBook) => {
-        if (typeof req.body.tag !== 'object') {
-            booktag = new bookTag()
-            booktag.tagId = Number(req.body.tag)
-            booktag.bookId = Number(newBook.id)
-            booktag.save()
-        } else if (typeof req.body.tag !== 'object') {
+        if (typeof req.body.tag == 'object') {
             req.body.tag.forEach( (singleTag) => {
                 booktag = new bookTag()
                 booktag.tagId = Number(singleTag)
                 booktag.bookId = Number(newBook.id)
                 booktag.save()
             })
+        } else {
+            booktag = new bookTag()
+            booktag.tagId = Number(req.body.tag)
+            booktag.bookId = Number(newBook.id)
+            booktag.save()
         }
         
         res.redirect('/employee')

@@ -10,7 +10,25 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
 <title>Add Book</title>
-
+<style>
+    body {
+            background-image: url("/image/background.jpg");
+            background-size: 100%;
+            background-repeat:repeat-y;
+        }
+        table{
+          background-color: antiquewhite;
+          padding: 5% 5%;
+        }
+        h2{
+            color: #6666ff
+        }
+        label{
+          color: aqua;
+          font-weight: bold;
+        }
+    
+</style>
 </head>
   <body>
     <%- include('./partials/navbar.ejs') %>
@@ -56,12 +74,13 @@
                             <% }) %>
                         </select>
                     </div>
-                    <form action="/upload" enctype="multipart/form-data" method="POST">
-                      <input type="file" name="myFile" id="myFile" required />
-                      <input type="submit" value="Upload" />
-                    </form>
           <button type="submit" class="btn btn-primary">Submit</button>
         </form>
+          <label for="">Cover</label>
+          <form action="/employee/upload" enctype="multipart/form-data" method="POST">
+            <input type="file" name="myFile" id="myFile" required />
+            <input type="submit" value="Upload" />
+          </form>
       </section>
     </div>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

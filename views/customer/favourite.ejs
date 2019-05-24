@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>My Favourite Books</title>
+    <style>
+        body {
+            background-image: url("/image/background.jpg");
+            background-size: 100%;
+            background-repeat:repeat-y;
+        }
+        table{
+          background-color: antiquewhite;
+          padding: 5% 5%;
+        }
+        h2{
+            color: #6666ff
+        }
+        
+  </style>
+  </head>
+  <body>
+      <%- include('../partials/navbar-cust.ejs') %>
+   <div class="container">
+        <br><h2 class="text-center font-weight-bold">My Favourite Book</h2><br>
+        <section>
+            <table class="table table-hover">
+                <thead class="bg-danger">
+                    <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Cover</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Author</th>
+                    <th scope="col">Options</th>
+                    </tr>
+                </thead>
+                <tbody>
+                  <% for(let i=0; i<books.length; i++){ %>
+                      <tr>
+                          <th scope="row"><%= i+1 %></th>
+                          <div class="">
+                              <td><a href="/customer/book/<%= books[i].id%>" >
+                                <img src="<%=books[i].cover%>" class="img-thumbnail" alt="Cinque Terre" width="100" height="75"></a></td> 
+                          </div>
+                            <td><%= books[i].title%></td>
+                            <td><%= books[i].author%></td>
+                            <td><a href="/customer/<%= favouriteId[i].id%>/unfavorite">
+                                <button type="submit" class="btn btn-danger">Unfavorite</button></a>
+                            </td>
+                          </tr>
+                  <% }%>
+                </tbody>
+                </table>
+        </section>
+   </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  </body>
+</html>

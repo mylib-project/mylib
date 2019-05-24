@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>MyLib</title>
+    <style>
+            body {
+                background-image: url("/image/home.jpg");
+                background-size: 100%;
+                background-repeat: no-repeat;
+            }
+            p{
+                background-color: grey
+            }
+            footer{
+                background-color: grey
+            }
+            h1{
+                font-weight: bold;
+                color: #6666ff
+            }
+    </style>
+  </head>
+  <body>
+    <div class="container"><br>
+        <header>
+            <h1 class="text-center text-primary">Welcome to MyLib Book Rent</h1><br>
+            <blockquote class="blockquote text-center">
+                <p class="mb-0 text-white" >“A book is a gift you can open again and again.”</p>
+                <footer class="blockquote-footer text-white"> Garrison Keillor</footer>
+            </blockquote>
+        </header><br>
+        <section><br>
+            <h4 class="font-weight-bold text-center text-primary">Login as:</h4><br>
+            <div class="row">
+                <div class="col-sm-6">
+                    <form method="GET" action="/customer/login" style="float: right">
+                        <button type="submit" class="btn btn-primary btn-lg">Customer</button>
+                    </form>
+                </div>
+                <div class="col-sm-6">
+                    <form method="GET" action="/employee/login">
+                        <button type="submit" class="btn btn-primary btn-lg">Employee</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  </body>
+</html>

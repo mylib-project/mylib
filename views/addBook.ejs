@@ -74,6 +74,10 @@
                             <% }) %>
                         </select>
                     </div>
+                    <form action="/upload" enctype="multipart/form-data" method="POST">
+                      <input type="file" name="myFile" id="myFile" required />
+                      <input type="submit" value="Upload" />
+                    </form>
           <button type="submit" class="btn btn-primary">Submit</button>
         </form>
       </section>

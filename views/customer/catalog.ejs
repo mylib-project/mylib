@@ -79,7 +79,7 @@
                                 <tr>
                                     <th scope="row"><%= i+1 %></th>
                                     <td><a href="/customer/book/<%= books[i].id%>">
-                                    <img src="<%= books[i].cover %>" class="img-thumbnail" alt="Cinque Terre" width="275" height="200"></a></td> 
+                                    <img src="<%=`.../${books[i].cover}` %>" class="img-thumbnail" alt="Cinque Terre" width="275" height="200"></a></td> 
                                     <td><%= books[i].title%></td>
                                     <td><%= books[i].author%></td>
                                     <td><%= books[i].publisher%></td>

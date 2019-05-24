@@ -1,7 +1,10 @@
 const router = require('express').Router()
-const {Employee, Customer, Tag, bookrent, Book, bookTag} = require('../models')
+const {Employee, Tag, Book, bookTag} = require('../models')
 const checkLogin = require('../middleware/checkLogin')
+const multer = require('multer');
+const upload = multer({ dest: './views/customer/' });
 let bcrypt = require('bcrypt')
+let filename
 
 router.get('/', checkLogin, (req, res) => {
     Book.findAll({
@@ -55,22 +58,44 @@ router.post('/edit/:bookId', checkLogin, (req, res) => {
             allBookTag.forEach( (bookTag) => {
                 bookTag.destroy()
             })
-            if (typeof req.body.tag !== 'object') {
-                booktag = new bookTag()
-                booktag.tagId = Number(req.body.tag)
-                booktag.bookId = Number(oneBookToUpdate.id)
-                booktag.save()
-            } else if (typeof req.body.tag == 'object') {
-                req.body.tag.forEach( (singleTag) => {
+            oneBookToUpdate.update({
+                title: req.body.title,
+                author: req.body.author,
+                publisher:  req.body.publisher,
+                publicationYear:  req.body.publicationYear,
+                numberOfPage:  req.body.numberOfPage,
+                price:  req.body.price,
+                stock:  req.body.stock,
+                cover: `./uploads/${filename}`
+            })
+            .then( () => {
+                if (typeof req.body.tag == 'object') {
+                    req.body.tag.forEach( (singleTag) => {
+                        booktag = new bookTag()
+                        booktag.tagId = Number(singleTag)
+                        booktag.bookId = Number(oneBookToUpdate.id)
+                        booktag.save()
+                    })
+                } else {
                     booktag = new bookTag()
-                    booktag.tagId = Number(singleTag)
+                    booktag.tagId = Number(req.body.tag)
                     booktag.bookId = Number(oneBookToUpdate.id)
                     booktag.save()
-                })
-            }
-            res.redirect('/employee')
+                }
+                
+                res.redirect('/employee')
+            })
+            .catch( (err) => {
+                res.send(err)
+            })
             
         })
+        .catch( (err) => {
+            res.send(err)
+        })
+    })
+    .catch( (err) => {
+        res.send(err)
     })
 })
 
@@ -95,21 +120,22 @@ router.post('/addBook', checkLogin, (req, res) => {
         publicationYear:  req.body.publicationYear,
         numberOfPage:  req.body.numberOfPage,
         price:  req.body.price,
-        stock:  req.body.stock
+        stock:  req.body.stock,
+        cover: `./${filename}`
     })
     .then( (newBook) => {
-        if (typeof req.body.tag !== 'object') {
-            booktag = new bookTag()
-            booktag.tagId = Number(req.body.tag)
-            booktag.bookId = Number(newBook.id)
-            booktag.save()
-        } else if (typeof req.body.tag !== 'object') {
+        if (typeof req.body.tag == 'object') {
             req.body.tag.forEach( (singleTag) => {
                 booktag = new bookTag()
                 booktag.tagId = Number(singleTag)
                 booktag.bookId = Number(newBook.id)
                 booktag.save()
             })
+        } else {
+            booktag = new bookTag()
+            booktag.tagId = Number(req.body.tag)
+            booktag.bookId = Number(newBook.id)
+            booktag.save()
         }
         
         res.redirect('/employee')
@@ -205,6 +231,18 @@ router.post('/register', (req, res) => {
     .catch( (err) => {
         res.send(err)
     })
+})
+
+router.post('/upload', upload.single('myFile'), (req, res) => {
+    if (req.file) {
+        console.log('Uploading file...');
+        filename = req.file.filename;
+        var uploadStatus = 'File Uploaded Successfully';
+    } else {
+        console.log('No File Uploaded');
+        filename = 'FILE NOT UPLOADED';
+        var uploadStatus = 'File Upload Failed';
+    }
 })
 
 module.exports = router

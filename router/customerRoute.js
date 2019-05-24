@@ -25,14 +25,14 @@ router.post('/login', (req, res)=>{
             let checkPassowrd= bcryt.compareSync(req.body.password, customer.password)
             console.log(checkPassowrd)
             if(checkPassowrd){
-                console.log(req.session)
+                // console.log(req.session)
                 req.session.user = {
                     id: customer.id,
                     name: `${customer.firstName} ${customer.lastName}`,
                     role: `customer`,
                     status: 'login'
                 }
-                console.log(req.session)
+                // console.log(req.session)
                 res.redirect('/customer/catalog')
             }else{
                 throw new Error ('Wrong password')
@@ -51,7 +51,15 @@ router.get('/register', (req, res)=>{
 })
 
 router.post('/register', (req, res)=>{
-    let newCustomer={
+    // let obj = {
+    //     firstName: req.body.firstName,
+    //     lastName: req.body.lastName,
+    //     birthday: req.body.birthday,
+    //     email: req.body.email,
+    //     password: req.body.password
+    // }
+    // res.send(obj)
+    Customer.create({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         birthday: req.body.birthday,
@@ -59,16 +67,9 @@ router.post('/register', (req, res)=>{
         password: req.body.password,
         point: 0,
         balance: 0
-    }
-    Customer.create(newCustomer)
+    })
     .then(newCustomer=>{
-        req.session.user = {
-            id: customer.id,
-            name: `${customer.firstName} ${customer.lastName}`,
-            role: `customer`,
-            status: 'login'
-        }
-        res.redirect('/customer/catalog')
+        res.redirect('/customer/login')
     })
     .catch(err=>{
         res.send(err)

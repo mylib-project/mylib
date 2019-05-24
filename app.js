@@ -5,14 +5,16 @@ const customerRoute = require('./router/customerRoute')
 const employeeRoute = require('./router/employeeRoute')
 const session = require('express-session')
 
-app.use(express.urlencoded({ extended: false }));
-app.use(express.static(__dirname+'/public'))
 app.use(session({
     secret: 'mylib.id',
     resave: false,
     saveUninitialized: true
   })
 )
+
+app.use(express.urlencoded({ extended: false }));
+app.use(express.static(__dirname+'/public'))
+
 
 app.get('/', (req, res)=>{
     res.render('index.ejs')

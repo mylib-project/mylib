@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Books Catalog</title>
+    <style>
+            body {
+                background-image: url("/image/background.jpg");
+                background-size: 100%;
+                background-repeat:repeat-y;
+            }
+            table{
+              background-color: antiquewhite;
+              padding: 5% 5%;
+            }
+            h2{
+                color: #6666ff
+            }
+            
+      </style>
+  </head>
+  <body>
+        <%- include('../partials/navbar-cust.ejs') %>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <br><h2 class="display-4 text-center">MyLib Books Catalogue</h2>
+            <blockquote class="blockquote text-center">
+                <p class="mb-0 text-primary">Welcome <%= customer.getFullName() %></p>
+            </blockquote>
+        </header><br>
+        
+        <!-- Body -->
+        <div class="container2">
+            <div class="row">
+                <!-- Kolom category -->
+                <div class="col-md-3">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text text-left">
+                                <form method="GET" action="/customer/catalog">
+                                    <label class="text-primary font-weight-bolder"><b>Title:</b></label><br>
+                                    <input type="text" name="title" placeholder="Title"> <br>
+                                    <label class="text-primary font-weight-bolder"><b>Status:</b></label><br>
+                                    <select name="status">
+                                        <option value="1" >All</option>
+                                        <option value="2">Avaliable</option>
+                                    </select><br>
+                                    <label for="tag" class="text-primary font-weight-bolder">Category:</label><br>
+                                        <% tags.forEach(tag=>{ %>
+                                            <input type="checkbox" name='tag' value="<%=tag.id%>" class="small"><%=tag.name%><br>
+                                        <%})%>
+                                        <br><button type="submit" class="btn btn-primary btn-sm">Search</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Kolom Tabel list buku -->
+                <div class="col-md-9">
+                    <table class="table table-hover">
+                        <thead  class="h5 text-center bg-danger">
+                            <tr>
+                            <th scope="col">No</th>
+                            <th scope="col">Cover</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Author</th>
+                            <th scope="col">Publisher</th>
+                            <th scope="col">Options</th>
+                            </tr>
+                        </thead>
+                        <tbody class="h6">
+                            <% for(let i=0; i<books.length; i++){ %>
+                                <tr>
+                                    <th scope="row"><%= i+1 %></th>
+                                    <td><a href="/customer/book/<%= books[i].id%>">
+                                    <img src="<%=`.../${books[i].cover}` %>" class="img-thumbnail" alt="Cinque Terre" width="275" height="200"></a></td> 
+                                    <td><%= books[i].title%></td>
+                                    <td><%= books[i].author%></td>
+                                    <td><%= books[i].publisher%></td>
+                                    <td><a href="/customer/book/<%= books[i].id%>">
+                                        <button type="button" class="btn btn-primary">Detail</button></a>
+                                    </td>
+                                </tr>
+                            <% }%>
+                        </tbody>
+                        </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  </body>
+</html>

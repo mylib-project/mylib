@@ -1,14 +1,28 @@
 const express= require('express')
 const app= express()
 const port= 3000
-const employeeRoute = require('./router/employeeRoute')
 const customerRoute = require('./router/customerRoute')
+const employeeRoute = require('./router/employeeRoute')
+const session = require('express-session')
+
+app.use(session({
+    secret: 'mylib.id',
+    resave: false,
+    saveUninitialized: true
+  })
+)
 
 app.use(express.urlencoded({ extended: false }));
-app.listen(port, () => console.log(`Server running on port port: ${port}`))
+app.use(express.static(__dirname+'/public'))
 
-app.get('/', (req, res) => {
-    res.render('home, login.')
+
+app.get('/', (req, res)=>{
+    res.render('index.ejs')
 })
-app.use('/employees', employeeRoute)
-app.use('/customers', customerRoute)
+
+
+app.use('/employee', employeeRoute)
+app.use('/customer', customerRoute)
+
+
+app.listen(port, () => console.log(`Server running on port port: ${port}`))

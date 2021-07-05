@@ -1,4 +1,7 @@
 'use strict';
+const bcrypt= require('bcrypt')
+const salt= bcrypt.genSaltSync(10)
+
 module.exports = (sequelize, DataTypes) => {
   const Customer = sequelize.define('Customer', {
     firstName: DataTypes.STRING,
@@ -6,10 +9,19 @@ module.exports = (sequelize, DataTypes) => {
     birthday: DataTypes.DATE,
     email: {
       type: DataTypes.STRING,
-      validate: {
-        isEmail: {
+      validate:{
+        isEmail:{
           args: true,
-          msg: `Wrong email format`
+          msg: 'Please input email in correct format'
+        },
+        isUniq(value){
+          return Customer.findOne({where: { email: value }})
+          .then(email=>{
+            if(email) throw new Error ('Email has been used')
+          })
+          .catch(err=>{
+            throw new Error (err.message)
+          })
         }
       }
     },
@@ -23,40 +35,23 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     point: DataTypes.INTEGER,
-    balance: {
-      type: DataTypes.INTEGER,
-      validate: {
-        min: {
-          args: 0,
-          msg: `Balance minimium is zero (0)`
-        }
-      }
-    }
+    balance: DataTypes.INTEGER
   }, {
-    validate: {
-      emailUnique() {
-        return Customer.findAll()
-        .then( (customers) => {
-            for (var i=0; i<customers.length; i++) {
-              if (customers[i].id !== this.id) {
-                if (customers[i].email === this.email) {
-                  throw new Error(`Email sudah dgunakan`)
-                }
-              }
-            }
-        })
-      }
-    },
-    hooks: {
+    hooks:{
       beforeCreate: (customer, options) => {
-        var salt = bcrypt.genSaltSync(10)
-        var hashedPassword = bcrypt.hashSync(customer.password, salt)
-        customer.password = hashedPassword
+        customer.password = bcrypt.hashSync(customer.password, salt)
+
       }
     }
   });
   Customer.associate = function(models) {
     // associations can be defined here
+    Customer.hasMany(models.Favourite,{foreignKey: 'customerId'})
+    Customer.hasMany(models.bookRent,{foreignKey: "customerId"})
   };
+
+  Customer.prototype.getFullName= function(){
+    return `${this.firstName} ${this.lastName}`
+  }
   return Customer;
 };
